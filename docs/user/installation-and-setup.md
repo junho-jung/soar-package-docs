@@ -1,5 +1,23 @@
 # 설치 및 초기 활성화
 
+## 0. 베타 패키지 직접 설치
+
+현재 문서 기준 패키지는 정식 Release 전 베타 버전 `SOAR_Operations_Core 1.11.0.1`입니다. 아래 링크는 Salesforce 로그인 후 패키지 설치 화면으로 이동합니다.
+
+| 환경 | 설치 링크 |
+|---|---|
+| Production | [Production 설치 화면](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tdM000000bx5xQAA) |
+| Sandbox | [Sandbox 설치 화면](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tdM000000bx5xQAA) |
+
+- **Subscriber Package Version ID**: `04tdM000000bx5xQAA`
+- **CLI 설치**:
+
+```bash
+sf package install --package 04tdM000000bx5xQAA --target-org <YOUR_ORG_ALIAS> --wait 30 --no-prompt
+```
+
+설치에는 Salesforce 로그인과 패키지 설치 권한이 필요합니다. 베타 버전은 먼저 Sandbox에서 설치·권한·기능을 확인하고, 운영 조직 적용은 별도 승인 후 진행하세요. 설치 링크가 더 이상 유효하지 않으면 과거 ID를 재사용하지 말고 패키지 제공자에게 최신 배포 정보를 확인합니다.
+
 ## 1. 설치 전 확인
 
 | 항목 | 기본 기능 | 해당 기능을 사용할 때 |
@@ -18,7 +36,7 @@
 Salesforce AppExchange 또는 제공자가 전달한 설치 링크에서 패키지를 설치합니다. CLI를 사용할 경우 아래처럼 조직 별칭과 배포 채널에서 받은 패키지 버전 ID를 사용합니다.
 
 ```bash
-sf package install --package <PACKAGE_VERSION_ID> --target-org <YOUR_ORG_ALIAS> --wait 30 --no-prompt
+sf package install --package 04tdM000000bx5xQAA --target-org <YOUR_ORG_ALIAS> --wait 30 --no-prompt
 ```
 
 설치 완료 후 패키지 네임스페이스가 적용된 앱과 권한 집합이 보이는지 확인합니다. Subscriber 조직에 패키지 소스를 직접 배포하는 방식은 사용하지 않습니다.
@@ -76,4 +94,3 @@ sf org assign permset --name soarpkg__SOAR_Operator --target-org <YOUR_ORG_ALIAS
 - [ ] 기본 정책과 대응 액션이 조직 정책에 맞게 검토됨
 - [ ] 테스트 이벤트가 감사 로그와 대시보드에 반영됨
 - [ ] Zero-Login 사용 시 Sites와 게스트 권한 검토 완료
-

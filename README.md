@@ -6,6 +6,20 @@ Salesforce SOAR 패키지의 사용자 매뉴얼, Subscriber 확장 가이드, �
 
 > 문서 상태: 베타 검증 기준의 공개 문서입니다. GitHub Release 자산이나 패키지 설치 파일을 관리하지 않습니다.
 
+## 베타 패키지 직접 설치
+
+현재 문서 기준 패키지는 정식 Release 전 베타 버전 `SOAR_Operations_Core 1.11.0.1`입니다. Salesforce 관리자 계정으로 먼저 Sandbox에 설치해 기능과 권한을 검토하세요.
+
+| 환경 | 설치 화면 |
+|---|---|
+| Production | [Salesforce Production 설치](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tdM000000bx5xQAA) |
+| Sandbox | [Salesforce Sandbox 설치](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tdM000000bx5xQAA) |
+
+- **Subscriber Package Version ID**: `04tdM000000bx5xQAA`
+- **CLI**: `sf package install --package 04tdM000000bx5xQAA --target-org <YOUR_ORG_ALIAS> --wait 30 --no-prompt`
+- 설치 후에는 [설치 및 초기 활성화](./docs/user/installation-and-setup.md)의 권한·Named Credential·Sites·스케줄 체크리스트를 완료합니다.
+- 베타 버전이므로 운영 조직에 적용하기 전에 Sandbox 검증과 조직의 변경 승인 절차를 진행합니다.
+
 ## 먼저 읽을 문서
 
 - [사용자 매뉴얼](./docs/user/README.md): 설치, 초기 활성화, 권한, 일상 운영, 문제 해결
