@@ -1,0 +1,24 @@
+# Local and secret material must never enter the public documentation repository.
+.env
+.env.*
+*.log
+*.secret
+*.token
+*.key
+*.pem
+*.p12
+*.crt
+
+# Salesforce or implementation workspaces are private and out of scope here.
+force-app/
+scripts/
+scratch/
+\.sf/
+\.sfdx/
+node_modules/
+
+# Local OS/editor artifacts.
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
