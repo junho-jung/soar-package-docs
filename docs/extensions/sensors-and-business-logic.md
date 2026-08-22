@@ -12,6 +12,20 @@
 | `soarpkg.SecuritySensorAdapter` | 센서와 패키지 이벤트 흐름 사이 | 정책 평가·감사·알림 파이프라인으로 전달 |
 | `soarpkg.Sec` | 기존 업무 로직의 명시적 평가 지점 | 정책 코드·심각도·문맥을 평가 흐름에 전달 |
 
+## Subscriber 이벤트 어댑터 사용 기준
+
+Subscriber 센서가 패키지 이벤트 흐름에 연결될 때는 `SecuritySensorAdapter`를 경계로 사용합니다.
+
+1. `buildSubscriberContext`로 레코드에서 최소 문맥을 만듭니다.
+2. 조직의 정책 코드와 심각도를 지정합니다.
+3. 재시도될 수 있는 업무 요청에는 `idempotencyKey`를 설정합니다.
+4. `publishSubscriberAlert`를 호출해 표준 이벤트를 발행합니다.
+5. 반환값과 후속 감사 이벤트를 기준으로 실패·재시도 처리를 분리합니다.
+
+어댑터는 `resourceId`, `resourceName`, `resourceType`, 사용자 식별자와 같은 운영 문맥을 정규화합니다. 원본 레코드 전체, SOQL 문장, 이메일·프로필, 비밀번호·토큰·원시 payload를 문맥으로 전달하지 않습니다.
+
+`SecuritySubscriberEventContext`는 패키지 내부 이벤트 발행을 위한 입력 DTO입니다. Subscriber 코드에서 JSON으로 직렬화하지 말고 어댑터 메서드의 인자로 전달합니다.
+
 ## Subscriber 담당 범위
 
 1. 어떤 객체와 변경이 보안 신호인지 정의합니다.
@@ -40,4 +54,3 @@
 | 중복 신호 | 중복 억제 기준에 따라 재평가 또는 건너뜀 |
 | 외부 전송 실패 | 전달 원장 기록과 제한된 재시도 |
 | 패키지 처리 장애 | 원본 업무 트랜잭션과 분리된 실패 기록·운영 알림 |
-

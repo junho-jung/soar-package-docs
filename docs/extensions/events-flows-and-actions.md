@@ -8,6 +8,20 @@ SOAR가 생성한 표준 보안 이벤트는 Subscriber 조직의 선언형 자�
 
 표준 이벤트의 구체적인 필드와 설치 버전별 계약은 패키지 문서와 Salesforce Describe 결과를 기준으로 확인합니다. 이 공개 문서는 내부 스키마를 복사해 제공하지 않습니다.
 
+Subscriber 자동화에서 주로 사용하는 표준 이벤트 필드는 다음과 같습니다.
+
+| 필드 | 용도 |
+|---|---|
+| `EventKey__c` | 이벤트와 재시도 상관관계 식별 |
+| `PolicyCode__c` | 평가된 정책 코드 |
+| `ActionName__c` | 연결된 대응 액션 |
+| `Severity__c` | 위험도 |
+| `UserId__c`, `UserName__c` | 대상 또는 요청 사용자 |
+| `ResourceId__c`, `ResourceName__c`, `ResourceType__c` | 대상 업무 리소스 |
+| `Payload__c` | 패키지가 정규화한 안전한 이벤트 문맥 |
+
+이벤트 필드는 Subscriber 조직의 Flow, Platform Event Trigger, Queueable 후속 처리에서 읽기 전용 입력으로 취급합니다. 패키지 내부 감사 원장이나 관리 패키지 객체를 직접 수정하지 않습니다.
+
 ## Flow 기반 확장
 
 Event-Triggered Flow 또는 패키지가 제공하는 Invocable Action을 사용해 다음과 같은 후속 업무를 연결할 수 있습니다.
@@ -33,7 +47,7 @@ Subscriber의 Apex Trigger, Queueable, Platform Event subscriber 등은 표준 �
 
 ## Invocable 자동화 계약
 
-`soarpkg.SecurityInvocableLogger`와 같은 Invocable 계약은 Screen Flow 또는 Record-Triggered Flow에서 정책 코드·심각도·업무 문맥을 SOAR 평가 흐름에 전달하는 용도입니다.
+`soarpkg.SecurityInvocableLogger`의 `Send Security Log` 액션은 Screen Flow 또는 Record-Triggered Flow에서 정책 코드·심각도·업무 문맥을 SOAR 평가 흐름에 전달하는 용도입니다. 입력은 `policyCode`, `severity`, `message` 또는 `details`, `recordId`, `targetUserId`로 구성하고, 결과의 `isProcessed`와 `statusMessage`를 후속 분기 조건으로 사용합니다.
 
 입력 문맥에는 최소한의 업무 정보만 넣고, 비밀번호·서명 키·액세스 토큰·민감한 원문을 포함하지 않습니다. Flow 실행이 반복될 수 있으므로 레코드 ID나 업무 요청 ID를 기준으로 중복 정책을 정합니다.
 
@@ -44,4 +58,3 @@ Subscriber의 Apex Trigger, Queueable, Platform Event subscriber 등은 표준 �
 - [ ] 반복 이벤트가 중복 티켓·알림을 만들지 않음
 - [ ] 비동기 실행 실패가 감사 원장에 남음
 - [ ] 재시도 횟수와 비상 중지 방법이 문서화됨
-

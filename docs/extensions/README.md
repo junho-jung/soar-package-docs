@@ -25,12 +25,52 @@
 |---|---|---|
 | `soarpkg.ISecuritySensor` | 고객 객체 변경을 보안 신호로 변환 | 트랜잭션 내 신호 생성 |
 | `soarpkg.SecuritySensorAdapter` | 센서와 패키지 이벤트 흐름 사이 | 후속 비동기 처리 가능 |
+| `soarpkg.SecuritySubscriberEventContext` | Subscriber가 전달할 최소 보안 문맥 | 안전한 입력 DTO |
 | `soarpkg.Sec` | 업무 로직에서 정책 평가 지점 제공 | 호출 결과는 패키지 정책에 따름 |
 | `soarpkg__SecurityAlert__e` | 표준 보안 이벤트를 Flow·Trigger에 전달 | 비동기 이벤트 |
 | `soarpkg.SecurityInvocableLogger` | 선언형 자동화에서 보안 이벤트 기록 | Flow 호출 |
 | `soarpkg.ISecurityActionHtmlRenderer` | 결과 화면 표현을 조직 기준으로 확장 | 응답 렌더링 |
 
-실제 접근 수준(`global`/`public`), 파라미터와 지원 버전은 설치한 패키지 버전의 공식 계약과 Salesforce Describe 결과를 기준으로 확인합니다. 이름만 보고 내부 클래스나 내부 API를 직접 호출하지 않습니다.
+실제 접근 수준(`global`/`public`), 파라미터와 지원 버전은 설치한 패키지 버전의 공식 계약과 Salesforce Describe 결과를 기준으로 확인합니다. 아래 공개 계약에 없는 내부 클래스나 내부 API는 직접 호출하지 않습니다.
+
+## 최신 Subscriber 계약 요약
+
+### `SecuritySensorAdapter`
+
+| 메서드 | 용도 | 반환값 |
+|---|---|---|
+| `buildSubscriberContext(SObject record, String actionName, String severity, String alertTitle)` | 업무 레코드에서 안전한 최소 문맥 생성 | `SecuritySubscriberEventContext` |
+| `publishSubscriberAlert(String policyCode, String objectName, Id recordId, String severity, SecuritySubscriberEventContext context)` | 표준 `SecurityAlert__e` 발행 | `Boolean` |
+
+`SecuritySubscriberEventContext`가 제공하는 문맥 필드는 `policyCode`, `severity`, `actionName`, `alertTitle`, `userId`, `userName`, `resourceId`, `resourceName`, `resourceType`, `eventKey`, `idempotencyKey`입니다. 이메일, 프로필, 쿼리, 원본 payload와 같은 불필요한 민감 정보는 공개 문맥에 포함하지 않습니다.
+
+`idempotencyKey`를 사용하면 동일 업무 요청의 재시도에 대해 일관된 이벤트 키를 만들 수 있습니다. `eventKey`를 직접 지정하는 경우에는 패키지가 공백과 길이를 정규화합니다.
+
+Subscriber에서 `SecuritySubscriberEventContext`를 직접 `JSON.serialize()`하지 않습니다. 문맥 객체를 `publishSubscriberAlert`에 전달하면 패키지가 안전한 필드만 정규화하고 내부에서 이벤트 payload를 생성합니다.
+
+### `Sec`
+
+| 메서드 | 사용 목적 |
+|---|---|
+| `log(String eventName)` | 기본 정보 보안 이벤트 기록 |
+| `log(String eventName, Map<String, Object> details)` | 업무 문맥을 포함한 이벤트 기록 |
+| `log(String policyCode, String severity, String message, Map<String, Object> contextMap)` | 정책·심각도·메시지를 지정한 이벤트 기록 |
+| `triggerAction(String policyCode, String recordId, String targetUserId)` | 정책 코드와 대상 기준의 평가 흐름 시작 |
+| `evaluateEvent(Map<String, Object> eventPayload)` | 일반 이벤트 payload를 정책 평가 흐름으로 전달 |
+
+### `SecurityInvocableLogger`
+
+Flow의 `Send Security Log` 액션은 다음 입력을 사용합니다.
+
+| 입력 | 설명 |
+|---|---|
+| `policyCode` | 보안 정책 식별 코드 |
+| `severity` | `INFO`, `WARNING`, `HIGH`, `CRITICAL` 등 위험도 |
+| `message` 또는 `details` | 이벤트 설명 |
+| `recordId` | 관련 업무 레코드 ID |
+| `targetUserId` | 대상 사용자 ID. 생략 시 현재 사용자 |
+
+액션 결과는 `isProcessed`, `policyCode`, `statusMessage`로 반환됩니다.
 
 ## 모든 확장에 공통으로 적용되는 조건
 
@@ -50,4 +90,3 @@
 - [ ] 재시도·중복·롤백·감사 기준을 정함
 - [ ] Sandbox에서 시뮬레이터와 실패 시나리오를 검증함
 - [ ] 운영 전 승인자와 비상 중지 절차를 정함
-

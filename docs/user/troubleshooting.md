@@ -11,6 +11,10 @@
 
 경고 카드의 연결 대상과 다음 조치를 확인합니다. 서명 키, 인바운드 기본 설정, Named Credential, Sites 게스트 권한, 정책 초기화, 스케줄은 패키지 설치자가 직접 활성화해야 하는 항목입니다.
 
+Setup & Health Center는 `SOAR Dashboard → 추가 탭 → 시스템 진단 & 설정 (Setup & Health Center)`에서 엽니다. 추가 탭 메뉴가 보이지 않으면 패키지 앱을 새로고침하고 `soarpkg__SOAR_Dashboard` 앱 페이지에 다시 진입합니다.
+
+Teams와 Slack의 상태가 준비되지 않으면 `IF_Teams_Base`와 `IF_Slack_Base`라는 Named Credential Developer Name이 정확한지 먼저 확인합니다.
+
 ## Teams 또는 Slack 알림이 도착하지 않음
 
 - 채널의 Named Credential이 존재하고 활성화되어 있는지 확인합니다.
@@ -41,4 +45,3 @@
 ## 로그가 쌓이지 않음
 
 일반 사용자에게 운영 권한 집합이 없어도 백그라운드 이벤트 처리가 동작하는 구조인지 확인합니다. 그 다음 탐지 신호의 연결 상태, 정책 활성화 여부, 킬 스위치 상태, 감사 로그 보존 설정을 순서대로 확인합니다.
-

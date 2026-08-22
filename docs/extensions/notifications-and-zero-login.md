@@ -12,6 +12,13 @@ SOAR는 정책 코드, 심각도, 우선순위와 조직이 선택한 채널을 
 | 실패 추적 | 전달 원장과 제한된 지수 백오프 재시도 |
 | 최종 실패 | Fallback 경로와 관리자 알림 검토 |
 
+패키지의 표준 채널 점검은 다음 Named Credential Developer Name을 기준으로 합니다.
+
+- Microsoft Teams: `IF_Teams_Base`
+- Slack: `IF_Slack_Base`
+
+Route에 원시 webhook URL을 저장하지 말고, 위 canonical Named Credential 또는 조직 보안 정책에 맞는 허용된 Named Credential을 사용합니다.
+
 원시 webhook URL이나 인증값은 Route 레코드와 문서에 직접 저장하지 않습니다. Named Credential의 인증 방식과 권한은 고객 조직이 관리합니다.
 
 ## Teams·Slack 확장 범위
@@ -44,4 +51,3 @@ Zero-Login은 Salesforce Experience Cloud Site와 인바운드 전용 게스트 
 - URL query string에 장기 인증 정보를 넣지 않습니다.
 - 승인 없이 계정 동결·세션 종료·토큰 회수를 자동화하지 않습니다.
 - 외부 채널의 재시도 폭주가 Salesforce governor limit을 소모하지 않도록 제한합니다.
-
