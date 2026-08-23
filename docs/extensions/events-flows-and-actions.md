@@ -34,6 +34,12 @@ Event-Triggered Flow 또는 패키지가 제공하는 Invocable Action을 사용
 
 Flow에서 파괴적 조치를 직접 연결할 때는 승인·중복·롤백 조건을 별도로 설계해야 합니다.
 
+### 패키지 Flow 템플릿과 실제 전달 검증
+
+패키지 Flow 템플릿은 Subscriber 조직에 설치되지만 조직 정책에 따라 비활성 또는 초안 상태로 남을 수 있습니다. 사용할 템플릿은 Salesforce Flow Builder에서 관리자가 직접 활성화하고, 활성 버전과 실행 주체 권한을 확인합니다.
+
+`Send Security Log`를 호출하는 Subscriber Flow는 실제 정책 평가와 Delivery Ledger를 검증하는 대표적인 진입점입니다. 반대로 Threat Simulator나 단순 Entry point 진단 UI는 모의 감사 이벤트를 남길 수 있어도 외부 Teams callout과 동일한 경로라고 보지 않습니다. 실제 전달 판정은 정책 평가, `NOTIFY_TEAMS`, Delivery Ledger 최종 상태, 외부 카드 수신을 함께 확인합니다.
+
 ## 프로코드 커스텀 액션
 
 Subscriber의 Apex Trigger, Queueable, Platform Event subscriber 등은 표준 보안 이벤트를 받아 고객 조직의 후속 업무를 수행할 수 있습니다.

@@ -23,6 +23,22 @@ Teams와 Slack의 상태가 준비되지 않으면 `IF_Teams_Base`와 `IF_Slack_
 - 동일 이벤트가 중복 억제 창 안에서 제외된 것은 아닌지 확인합니다.
 - 전달 원장에서 실패와 재시도 횟수를 확인합니다.
 
+## Health는 성공하지만 Delivery Ledger가 실패함
+
+Health/Webhook/Ping의 HTTP 202는 연결성 점검입니다. 정책 기반 비동기 전달이 `DELIVERY_FAILED` 또는 `EXHAUSTED`로 끝나면 다음을 확인합니다.
+
+1. Named Credential Developer Name이 `IF_Teams_Base`와 일치하는지 확인합니다.
+2. External Credential Principal Access가 실제 실행 사용자·Flow 컨텍스트에 부여됐는지 확인합니다.
+3. Named Credential의 관리 패키지 허용 namespace에 `soarpkg`가 등록됐는지 확인합니다.
+4. 정책 Route가 `TEAMS`와 `NOTIFY_TEAMS`를 가리키고, fallback Route가 필요하면 별도로 활성화됐는지 확인합니다.
+5. Delivery Ledger의 Attempt, 다음 재시도 시각, 오류 코드를 확인합니다.
+
+시뮬레이터의 성공 토스트나 Health 202만으로 정책 기반 Teams E2E 성공을 판정하지 않습니다.
+
+## 시뮬레이터는 성공했지만 Delivery Ledger가 없음
+
+시뮬레이터와 일부 Entry point 버튼은 모의 이벤트·감사 기록 확인용입니다. 실제 외부 전달 검증은 Subscriber Flow의 `Send Security Log`, 실제 정책 이벤트, 또는 승인 후 수동 액션처럼 정책 평가를 거치는 경로로 수행합니다.
+
 ## 스케줄이 실행되지 않음
 
 - 관리자 권한으로 스케줄 관리자에 접근했는지 확인합니다.

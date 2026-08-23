@@ -24,6 +24,19 @@
 - 외부 연동 계약과 결과 상태 처리
 - 일반 사용자 무권한 탐지와 운영자 권한 격리
 
+## 최신 설치 오그 UAT 스냅샷
+
+2026-08-24 설치 오그 재설치 UAT에서 관리 패키지 버전 `0.1.0.4`를 별도 검증했습니다. 이 버전은 공개 Release 자산이 아니라 내부 UAT 기준입니다.
+
+- Provider `soarDevOrg`: RunLocalTests 184/184 통과, 전체 커버리지 84%
+- Subscriber `soarPkgInstall`: RunLocalTests 5/5 통과, 전체 커버리지 87%
+- Setup & Health: HTTPS Site·Guest 권한·Teams Health `READY`, 표준 스케줄 4개 Active
+- Teams: UI Webhook·Ping·승인 후 카드 발송과 `DELIVERED / NOTIFY_TEAMS / DEFAULT_TEAMS` Ledger 확인
+- 승인: 테스트 사용자 요청과 별도 관리자 승인자 분리 확인. 관리자 계정을 파괴적 액션 대상으로 사용하지 않음
+- 보류: 외부 Teams 계정 인증으로 실제 callback 버튼 클릭, 의도적 장애 endpoint 기반 Retry/Fallback, 외부 수신자 Compliance 이메일
+
+따라서 최신 UAT 판정은 “설치·권한·직접 Teams 연결·승인 후 카드 전달은 확인했으며, 외부 callback 실행과 장애 복구 일부는 추가 증적이 필요”입니다. 공개 설치 문서의 베타 패키지 버전과 내부 UAT 버전은 서로 다른 배포 단계로 구분합니다.
+
 ## 품질 게이트
 
 기능 변경은 다음 순서로 검증합니다.

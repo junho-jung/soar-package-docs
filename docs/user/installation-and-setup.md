@@ -109,6 +109,22 @@ Site의 Active Home Page는 공개 callback 처리 경로와 별개입니다. In
 - 연결 실패 시 전달 원장과 재시도 상태를 확인합니다.
 - 사용하지 않는 채널은 비활성화합니다.
 
+### 외부 자격 증명과 관리 패키지 접근 권한
+
+Teams처럼 관리 패키지 비동기 코드가 외부 Named Credential을 호출하는 경우, Named Credential 이름만 맞추는 것으로 충분하지 않을 수 있습니다. 설치 조직에서 다음을 순서대로 확인합니다.
+
+1. External Credential과 사용할 Named Principal을 만듭니다.
+2. Named Credential `IF_Teams_Base`가 해당 External Credential Principal을 사용하도록 연결합니다.
+3. 실제 정책 이벤트를 발행하는 사용자 또는 실행 컨텍스트에 External Credential Principal Access를 부여합니다. 조직에서 별도 Subscriber Permission Set을 만들어 최소 범위로 할당하는 방식을 권장합니다.
+4. Managed Package가 해당 Named Credential을 사용할 수 있도록 허용 namespace에 `soarpkg`를 등록합니다.
+5. Setup & Health Center에서 Teams Health, Webhook 테스트, Ping을 순서대로 확인합니다.
+
+Health의 HTTP 202는 외부 endpoint 연결과 수락만 증명합니다. 실제 정책 이벤트가 `NOTIFY_TEAMS`로 평가되어 Delivery Ledger에 `DELIVERED`로 남는지와 Teams 카드 수신은 별도 검증해야 합니다.
+
+### Flow 템플릿 활성화
+
+패키지에 포함된 Flow 템플릿은 설치 후 고객 조직의 자동화 정책에 맞춰 관리자가 직접 활성화합니다. Flow 목록에서 `[SOAR 템플릿]`으로 시작하는 Flow의 상태와 버전을 확인한 뒤, 사용할 Flow만 활성화합니다. Threat Simulator와 Entry point 진단 버튼은 모의 이벤트를 기록할 수 있지만, 그 자체로 실제 정책 기반 Delivery Ledger 생성을 보장하지 않습니다.
+
 ## 6. 설치 완료 체크리스트
 
 - [ ] 패키지 앱이 App Launcher에 표시됨
@@ -116,6 +132,8 @@ Site의 Active Home Page는 공개 callback 처리 경로와 별개입니다. In
 - [ ] 운영자 권한 집합이 필요한 사용자에게만 할당됨
 - [ ] Setup & Health Center의 필수 상태가 정상
 - [ ] 사용할 외부 채널의 Named Credential 연결 점검 완료
+- [ ] 외부 채널 Principal Access와 `soarpkg` 허용 namespace 확인
+- [ ] 사용할 패키지 Flow 템플릿만 활성화하고 버전 확인
 - [ ] 필요한 표준 스케줄만 활성화
 - [ ] 기본 정책과 대응 액션이 조직 정책에 맞게 검토됨
 - [ ] 테스트 이벤트가 감사 로그와 대시보드에 반영됨
