@@ -37,6 +37,18 @@ Zero-Login은 Salesforce Experience Cloud Site와 인바운드 전용 게스트 
 
 사이트를 활성화하지 않은 조직에서는 표준 Salesforce 로그인 후 승인 화면으로 대응하는 흐름을 사용합니다.
 
+## Teams callback은 Site 홈 주소와 다르다
+
+Zero-Login Site는 공개 진입점의 호스트와 경로를 제공하지만, 카드의 실행 버튼은 Site 홈 페이지로 이동하지 않습니다. 패키지는 다음 형태의 REST callback endpoint를 자동으로 생성합니다.
+
+```text
+<InboundBaseUrl>/services/apexrest/api/security/action
+```
+
+여기서 `InboundBaseUrl`은 `https://<site-domain>/<site-prefix>`까지만 설정하고, REST suffix는 패키지가 붙입니다. 카드가 브라우저에서 이 경로로 열리면 `@HttpGet` callback이 요청을 검증하고, 성공·승인 필요·만료·재사용·오류 결과를 HTML로 보여줍니다. 이 구조 때문에 Site의 기본 페이지를 `InMaintenance`로 설정한 Inbound 전용 Site에서도 callback은 별도로 처리됩니다.
+
+카드 버튼에 포함되는 opaque code, correlation, idempotency, approval binding 값은 단기·단회 보안 값입니다. 공개 이슈·문서·스크린샷에 원문을 남기지 않고, 만료·재사용 오류가 나면 새 정책 이벤트에서 새 카드를 발송합니다.
+
 ## 안전 제어
 
 - 파괴적 액션은 요청자와 승인자를 분리하는 이중 승인 흐름을 적용합니다.

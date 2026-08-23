@@ -42,6 +42,24 @@ Teams와 Slack의 상태가 준비되지 않으면 `IF_Teams_Base`와 `IF_Slack_
 - 링크가 이미 사용되었거나 만료된 경우 새 이벤트를 생성합니다.
 - 파괴적 대응은 승인 대기 상태가 정상인지 확인합니다.
 
+## Teams 버튼이 Site 홈이 아닌 Apex REST 주소로 열림
+
+다음과 같은 형태로 열리는 것은 정상입니다.
+
+```text
+https://<site-domain>/<site-prefix>/services/apexrest/api/security/action?...단기 callback 값...
+```
+
+Teams 대응 버튼은 Site 홈 페이지를 표시하는 링크가 아니라 공개 callback endpoint를 호출합니다. `InboundBaseUrl__c`에 REST suffix를 직접 입력하지 말고 Site 기본 주소만 저장했는지 확인합니다. 그 다음을 점검합니다.
+
+1. Site가 Active인지 확인합니다.
+2. Site Guest User에 `SOAR_Inbound_Guest`가 할당되어 있는지 확인합니다.
+3. Setup & Health Center에서 Callback 상태가 `READY`인지 확인합니다.
+4. 파괴적 액션이면 요청자와 다른 관리자가 먼저 승인했는지 확인합니다.
+5. 링크가 만료·재사용된 경우 기존 URL을 재시도하지 말고 새 카드를 발송합니다.
+
+브라우저 callback 결과는 HTML이고, `404`·`403`·`ACTION_CODE_EXPIRED`·`ACTION_ALREADY_DONE`은 각각 경로/게스트 권한/유효시간/단회 사용 상태를 뜻합니다. callback URL의 code·token 원문은 지원 요청에 복사하지 않습니다.
+
 ## 로그가 쌓이지 않음
 
 일반 사용자에게 운영 권한 집합이 없어도 백그라운드 이벤트 처리가 동작하는 구조인지 확인합니다. 그 다음 탐지 신호의 연결 상태, 정책 활성화 여부, 킬 스위치 상태, 감사 로그 보존 설정을 순서대로 확인합니다.

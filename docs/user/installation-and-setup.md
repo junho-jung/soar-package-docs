@@ -85,6 +85,17 @@ sf org assign permset --name soarpkg__SOAR_Operator --target-org <YOUR_ORG_ALIAS
 - `IsSystemEnabled__c`: 인바운드 기능 활성화 여부
 - `EnableWebhookSignature__c`: 웹훅 서명 검증 사용 여부
 
+`InboundBaseUrl__c`에는 Site의 HTTPS 기본 주소까지만 입력합니다. 형식은
+`https://<site-domain>/<site-prefix>`이며, `/services/apexrest/api/security/action` 같은 Apex REST 경로는 직접 덧붙이지 않습니다. 패키지가 Teams 카드 버튼을 만들 때 이 base URL 뒤에 공개 callback 경로를 자동으로 조합합니다.
+
+따라서 Teams에서 파괴적 액션 버튼을 누르면 Site 홈 화면이 아니라 다음 형태의 공개 REST callback으로 이동하는 것이 정상입니다.
+
+```text
+https://<site-domain>/<site-prefix>/services/apexrest/api/security/action?...단기 callback 값...
+```
+
+Site의 Active Home Page는 공개 callback 처리 경로와 별개입니다. Inbound 전용 Site를 `InMaintenance` 페이지로 두어도 callback endpoint는 동작할 수 있습니다. callback URL의 code·token·승인 식별자는 단기·단회 값이므로 문서나 일반 로그에 복사하지 않습니다.
+
 시크릿과 실제 URL은 공개 문서, 소스 코드, 일반 로그에 기록하지 않습니다.
 
 ## 5. 외부 채널 연결
