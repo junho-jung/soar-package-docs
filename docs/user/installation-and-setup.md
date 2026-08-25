@@ -17,7 +17,7 @@
 sf package install --package 04tdM000000c9OrQAI --target-org <YOUR_ORG_ALIAS> --security-type AdminsOnly --wait 30 --no-prompt
 ```
 
-설치에는 Salesforce 로그인과 패키지 설치 권한이 필요합니다. 베타 버전은 Sandbox, Developer 또는 Trial 조직에서 설치·권한·기능을 확인합니다. 운영 Production 조직 적용은 정식 배포 정보와 별도 승인 후 진행하세요.
+설치에는 Salesforce 로그인과 패키지 설치 권한이 필요합니다. 현재 문서의 버전은 Sandbox, Developer 또는 Trial 조직에서 설치·권한·기능을 확인하는 검증 기준입니다. 운영 Production 조직 적용은 제공자가 지정한 배포 정보와 별도 승인 후 진행하세요.
 
 ## 1. 설치 전 확인
 

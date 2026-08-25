@@ -4,10 +4,25 @@
 
 ## 권장 온보딩 순서
 
-1. [설치 및 초기 활성화](./installation-and-setup.md)
-2. [일상 운영과 권한 모델](./operations.md)
-3. [Subscriber 확장 지점 확인](../extensions/README.md)
-4. [문제 해결](./troubleshooting.md)
+1. [설치 후 전체 사용 런북](./end-to-end-runbook.md)
+2. [설치 및 초기 활성화](./installation-and-setup.md)
+3. [일상 운영과 권한 모델](./operations.md)
+4. [Subscriber 확장 지점 확인](../extensions/README.md)
+5. [문제 해결](./troubleshooting.md)
+
+## 가장 빠른 시작
+
+설치자는 먼저 [설치 후 전체 사용 런북](./end-to-end-runbook.md)의 1~4장을 순서대로 완료합니다. 특히 권한 집합만 할당하고 끝내지 말고, Setup & Health Center에서 Site·게스트 권한·Inbound Base URL·Named Credential·정책 초기화 상태를 확인해야 합니다.
+
+첫 테스트는 다음 순서로 진행합니다.
+
+1. Setup & Health Center의 연결 점검으로 Named Credential 연결을 확인합니다.
+2. 테스트 보안 이벤트로 앱·감사 로그 진입을 확인합니다.
+3. Threat Simulator는 모의 이벤트와 감사 로그 확인용으로 사용합니다.
+4. 실제 외부 전달을 판정할 때는 `Send Security Log` 또는 실제 정책 이벤트를 사용하고, Action Ledger와 Delivery Ledger를 차례로 확인합니다.
+5. Teams 카드의 최종 수신과 callback 결과까지 확인해야 정책 기반 외부 전달을 완료로 판정합니다.
+
+Health/Webhook/Ping의 성공이나 시뮬레이터의 성공 토스트만으로 Teams 정책 전달이 완료됐다고 판단하지 않습니다.
 
 ## 대상별 시작점
 
@@ -27,4 +42,3 @@
 - **설치 후 활성화**: 패키지를 설치한 뒤 고객 조직의 관리자 또는 보안 담당자가 직접 설정해야 하는 단계
 
 패키지 설치만으로 외부 채널, Experience Cloud Sites, 스케줄, 운영 정책이 자동으로 활성화되는 것은 아닙니다. 해당 기능을 사용할 조직은 [설치 및 초기 활성화](./installation-and-setup.md)의 체크리스트를 완료해야 합니다.
-

@@ -23,6 +23,29 @@ Teams와 Slack의 상태가 준비되지 않으면 `IF_Teams_Base`와 `IF_Slack_
 - 동일 이벤트가 중복 억제 창 안에서 제외된 것은 아닌지 확인합니다.
 - 전달 원장에서 실패와 재시도 횟수를 확인합니다.
 
+## Teams 카드에 액션 버튼이 보이지 않음
+
+카드가 도착했다는 사실만으로 실행 버튼이 항상 표시되는 것은 아닙니다. 다음 순서로 확인합니다.
+
+1. `InboundBaseUrl__c`가 비어 있지 않고 Setup & Health Center의 Callback 상태가 `READY`인지 확인합니다.
+2. Active Site가 존재하고 Site Guest 사용자에게 `soarpkg__SOAR_Inbound_Guest`가 할당됐는지 확인합니다.
+3. 파괴적 액션이면 Action Ledger가 독립 승인 상태인지 확인합니다. 승인 전에는 실행 버튼이 숨겨지는 것이 정상입니다.
+4. Webhook/Health/Ping 테스트는 연결성 증적이고, 실제 대화형 카드 테스트는 선택한 Manifest 액션과 대상 사용자로 별도 발송해야 합니다.
+5. `ACCEPTED`는 외부 전송 접수 상태입니다. 외부 Teams 카드 수신과 callback 실행 결과는 `DELIVERED` 및 callback HTML/감사 상태로 별도 확인합니다.
+
+`InboundBaseUrl__c`가 없을 때 카드가 전송되더라도 callback 버튼이 생성되지 않을 수 있습니다. Base URL에는 Site 기본 주소만 저장하고 `/services/apexrest/api/security/action` suffix는 직접 입력하지 않습니다.
+
+## Delivery Ledger 상태를 해석하는 방법
+
+| 상태 | 의미 | 다음 확인 |
+|---|---|---|
+| `ACCEPTED` | 패키지가 외부 전송 요청을 접수함 | 외부 카드 수신과 최종 상태 확인 |
+| `DELIVERED` | 외부 채널 전달 성공 | 카드 내용과 감사 상관관계 확인 |
+| `FAILED` | 현재 시도가 실패함 | Attempt, 오류 코드, 다음 재시도 확인 |
+| `EXHAUSTED` | 제한된 재시도 후 최종 실패 | Named Credential/Principal/Fallback과 원인 확인 |
+
+Action Ledger의 `PENDING/APPROVED/REJECTED/EXECUTED`는 의사결정·승인 상태이고, Delivery Ledger의 상태와 서로 대체하지 않습니다.
+
 ## Health는 성공하지만 Delivery Ledger가 실패함
 
 Health/Webhook/Ping의 HTTP 202는 연결성 점검입니다. 정책 기반 비동기 전달이 `DELIVERY_FAILED` 또는 `EXHAUSTED`로 끝나면 다음을 확인합니다.

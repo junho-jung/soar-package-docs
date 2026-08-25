@@ -6,24 +6,26 @@ Salesforce SOAR 패키지의 사용자 매뉴얼, Subscriber 확장 가이드, �
 
 > 문서 상태: 베타 검증 기준의 공개 문서입니다. GitHub Release 자산이나 패키지 설치 파일을 관리하지 않습니다.
 
-## 최신 베타 패키지 직접 설치
+## 현재 검증 기준 패키지 직접 설치
 
-현재 공개 설치본은 정식 Release 전 베타 버전 `SOAR_Operations_Core_Next 0.1.0.1`입니다. Salesforce 관리자 계정으로 Sandbox, Developer 또는 Trial 조직에 먼저 설치해 기능과 권한을 검토하세요.
+현재 공개 문서가 기준으로 삼는 설치본은 `SOAR_Operations_Core_Next 0.1.0.5`입니다. Salesforce 관리자 계정으로 Sandbox, Developer 또는 Trial 조직에 먼저 설치해 기능과 권한을 검토하세요. 이 저장소는 GitHub Release 자산을 관리하지 않으므로, 이후 배포에서는 제공자가 전달한 최신 Subscriber Package Version ID를 사용합니다.
 
 | 환경 | 설치 화면 |
 |---|---|
-| Sandbox | [Salesforce Sandbox 설치](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tdM000000byy5QAA) |
+| Sandbox | [Salesforce Sandbox 설치](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tdM000000c9OrQAI) |
 
 - **Package2**: `SOAR_Operations_Core_Next`
 - **Namespace**: `soarpkg`
-- **Subscriber Package Version ID**: `04tdM000000byy5QAA`
-- **CLI**: `sf package install --package 04tdM000000byy5QAA --target-org <YOUR_ORG_ALIAS> --wait 30 --no-prompt`
-- 베타 버전은 운영 Production 조직에 적용하기 전에 Sandbox 또는 Developer 조직에서 검증합니다.
+- **Subscriber Package Version ID**: `04tdM000000c9OrQAI`
+- **CLI**: `sf package install --package 04tdM000000c9OrQAI --target-org <YOUR_ORG_ALIAS> --security-type AdminsOnly --wait 30 --no-prompt`
+- 현재 검증본은 운영 Production 조직에 적용하기 전에 Sandbox 또는 Developer 조직에서 검증합니다.
 - 설치 후에는 [설치 및 초기 활성화](./docs/user/installation-and-setup.md)의 권한·Named Credential·Sites·스케줄 체크리스트를 완료합니다.
+- 화면을 처음부터 끝까지 따라가려면 [설치 후 전체 사용 런북](./docs/user/end-to-end-runbook.md)을 사용합니다.
 
 ## 먼저 읽을 문서
 
 - [사용자 매뉴얼](./docs/user/README.md): 설치, 초기 활성화, 권한, 일상 운영, 문제 해결
+- [설치 후 전체 사용 런북](./docs/user/end-to-end-runbook.md): UI 기준 설치·설정·테스트·Teams callback·원장 판정
 - [확장 가이드](./docs/extensions/README.md): Subscriber에서 사용할 수 있는 공개 확장 계약과 연결 지점
 - [포트폴리오](./docs/portfolio/README.md): 문제 정의, 보안 아키텍처, 검증 결과와 설계·검증 자료
 

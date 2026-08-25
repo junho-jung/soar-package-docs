@@ -21,6 +21,12 @@ Route에 원시 webhook URL을 저장하지 말고, 위 canonical Named Credenti
 
 원시 webhook URL이나 인증값은 Route 레코드와 문서에 직접 저장하지 않습니다. Named Credential의 인증 방식과 권한은 고객 조직이 관리합니다.
 
+### 현재 패키지의 채널별 사용 경계
+
+- **Teams**: `IF_Teams_Base`가 준비되면 Health·Webhook·Ping 연결 점검과 대화형 Adaptive Card 테스트를 사용할 수 있습니다. 실제 정책 전달은 정책 평가, Delivery Ledger, 외부 카드 수신까지 별도로 확인합니다.
+- **Slack**: 현재 문서와 UI에는 표준 Route와 연결성 점검을 위한 진입점이 있지만, 현재 검증 기준 패키지에서는 `IF_Slack_Base`와 Block Kit callback이 완성된 전달 경로로 제공되지 않습니다. Slack은 연결 설정과 향후 확장을 위한 루트로 취급하고 Teams의 성공 증적으로 대체하지 않습니다.
+- **Generic Webhook·SIEM·Ticketing·Custom**: 현재 UI의 Ping/연결성 진단과 Subscriber 확장 대상으로 사용합니다. 패키지의 Teams 정책 액션 어댑터와 동일한 실제 전달 경로로 간주하지 않습니다.
+
 ## Teams·Slack 확장 범위
 
 Subscriber는 표준 보안 경보의 표현과 전달 경로를 조직의 채널 정책에 맞게 조정할 수 있습니다. 채널별 메시지 변환은 외부 시스템의 요구사항에 맞추되, 원본 이벤트의 승인 상태와 감사 추적 ID를 누락하지 않습니다.
