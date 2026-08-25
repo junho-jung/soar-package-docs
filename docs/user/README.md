@@ -5,10 +5,11 @@
 ## 권장 온보딩 순서
 
 1. [설치 후 전체 사용 런북](./end-to-end-runbook.md)
-2. [설치 및 초기 활성화](./installation-and-setup.md)
-3. [일상 운영과 권한 모델](./operations.md)
-4. [Subscriber 확장 지점 확인](../extensions/README.md)
-5. [문제 해결](./troubleshooting.md)
+2. [패키지 흐름과 사용자 페르소나](./architecture-and-personas.md)
+3. [설치 및 초기 활성화](./installation-and-setup.md)
+4. [일상 운영과 권한 모델](./operations.md)
+5. [Subscriber 확장 지점 확인](../extensions/README.md)
+6. [문제 해결](./troubleshooting.md)
 
 ## 가장 빠른 시작
 

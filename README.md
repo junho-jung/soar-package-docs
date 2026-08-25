@@ -26,6 +26,7 @@ Salesforce SOAR 패키지의 사용자 매뉴얼, Subscriber 확장 가이드, �
 
 - [사용자 매뉴얼](./docs/user/README.md): 설치, 초기 활성화, 권한, 일상 운영, 문제 해결
 - [설치 후 전체 사용 런북](./docs/user/end-to-end-runbook.md): UI 기준 설치·설정·테스트·Teams callback·원장 판정
+- [패키지 흐름과 사용자 페르소나](./docs/user/architecture-and-personas.md): 아키텍처 흐름, 결정자·대상자·운영자 역할
 - [확장 가이드](./docs/extensions/README.md): Subscriber에서 사용할 수 있는 공개 확장 계약과 연결 지점
 - [포트폴리오](./docs/portfolio/README.md): 문제 정의, 보안 아키텍처, 검증 결과와 설계·검증 자료
 
