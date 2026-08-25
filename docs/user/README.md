@@ -25,6 +25,15 @@
 
 Health/Webhook/Ping의 성공이나 시뮬레이터의 성공 토스트만으로 Teams 정책 전달이 완료됐다고 판단하지 않습니다.
 
+### Teams 검증은 두 게이트로 나눕니다
+
+| 게이트 | 확인할 것 | 의미 |
+|---|---|---|
+| 연결성 | `IF_Teams_Base`, External Credential Principal Access, `soarpkg` 허용 namespace, Health·직접 POST | Salesforce에서 외부 endpoint를 호출할 수 있음 |
+| 정책 E2E | 실제 정책 이벤트, Audit, Action 결과, `NOTIFY_TEAMS` Delivery Ledger, Teams 카드 | 정책 평가부터 외부 수신까지 실제 업무 경로가 완료됨 |
+
+연결성 게이트가 성공해도 정책 E2E가 성공한 것은 아닙니다. 두 번째 게이트에서 `Status=DELIVERED`와 실제 카드 수신을 별도로 확인합니다.
+
 ## 대상별 시작점
 
 | 대상 | 먼저 볼 내용 |

@@ -5,6 +5,7 @@
 | 항목 | 내용 |
 |---|---|
 | PoC | 2차 PoC — Teams 알림 및 외부 Inbound·Zero-Login 검증 |
+| 문서 성격 | 역사 결과 기록 — 2026-08-23 `0.1.0.1` 실행 스냅샷; 현재 재실행 판정에 직접 사용하지 않음 |
 | 검증일 | 2026-08-23 |
 | 대상 환경 | Salesforce Scratch Org alias `soarInstallTest` |
 | 패키지 | `SOAR_Operations_Core_Next 0.1.0.1` |

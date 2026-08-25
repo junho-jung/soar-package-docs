@@ -15,6 +15,8 @@ Setup & Health Center는 `SOAR Dashboard → 추가 탭 → 시스템 진단 & �
 
 Teams와 Slack의 상태가 준비되지 않으면 `IF_Teams_Base`와 `IF_Slack_Base`라는 Named Credential Developer Name이 정확한지 먼저 확인합니다.
 
+Slack을 사용하지 않는 Teams 전용 검증에서는 `IF_Slack_Base`가 미설정이어도 Teams route의 `Match=true`와 Teams 직접 POST를 별도로 판정합니다. Health의 전체 상태와 채널별 상태를 혼동하지 마십시오.
+
 ## Teams 또는 Slack 알림이 도착하지 않음
 
 - 채널의 Named Credential이 존재하고 활성화되어 있는지 확인합니다.

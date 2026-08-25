@@ -29,6 +29,8 @@ Salesforce SOAR 패키지의 사용자 매뉴얼, Subscriber 확장 가이드, �
 - [패키지 흐름과 사용자 페르소나](./docs/user/architecture-and-personas.md): 아키텍처 흐름, 결정자·대상자·운영자 역할
 - [확장 가이드](./docs/extensions/README.md): Subscriber에서 사용할 수 있는 공개 확장 계약과 연결 지점
 - [포트폴리오](./docs/portfolio/README.md): 문제 정의, 보안 아키텍처, 검증 결과와 설계·검증 자료
+- 현재 PoC를 다시 진행할 때는 [PoC 재실행 계획서](./docs/portfolio/poc-rerun-plan.md)와 [재실행 결과서](./docs/portfolio/poc-rerun-results.md)를 기준으로 사용합니다. 기존 1~3차 PoC 문서는 과거 스냅샷으로 보존합니다.
+- 현재 PoC의 최종 게이트 판정과 패키지 문제·환경 문제·문서 보완점을 구분하려면 [PoC 피드백 및 원인 분류](./docs/portfolio/poc-feedback.md)를 함께 확인합니다.
 
 ## 패키지의 역할
 

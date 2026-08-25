@@ -5,7 +5,8 @@
 | 항목 | 내용 |
 |---|---|
 | PoC | 3차 PoC — Subscriber 사용자 확장 및 Global 계약 검증 |
-| 상태 | 계획 단계 |
+| 문서 성격 | 역사 계획 기록 — 당시 `0.1.0.1` 기준; 새 실행은 [PoC 재실행 계획서](./poc-rerun-plan.md)의 Phase 8을 사용 |
+| 상태 | 과거 계획 보존 |
 | 선행 문서 | [1차 PoC 결과서](./poc-1-results.md) |
 | 선행 PoC | 2차 Teams·외부 Inbound PoC 완료 후 진행 |
 | 대상 환경 | Subscriber Sandbox와 별도 확장 테스트 harness |

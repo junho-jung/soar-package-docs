@@ -1,6 +1,8 @@
-# SOAR Sandbox 설치 테스트 로그
+# SOAR Sandbox 설치 테스트 로그 — 역사 기록
 
 > 범위: `soar-package-docs` README와 연결 문서에 기재된 설치 절차를 기준으로 진행한 `soarInstallTest` Scratch Org 도입 테스트 기록입니다.
+>
+> 문서 성격: 2026-08-23 패키지 `0.1.0.1`의 과거 실행 로그입니다. 새 PoC는 [재실행 계획서](docs/portfolio/poc-rerun-plan.md)와 [재실행 실행 로그](poc-rerun-execution-log.md)를 사용하며 이 파일에 이어 쓰지 않습니다.
 >
 > 보안: 토큰, 비밀번호, 일회성 로그인 URL, Org ID, 사용자명, 원본 로그는 기록하지 않습니다. 이 파일은 로컬 작업 기록이며 커밋하지 않습니다.
 

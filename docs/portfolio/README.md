@@ -24,10 +24,16 @@ SOAR는 Salesforce를 운영 플랫폼으로 사용하는 조직을 위해 탐�
 
 - [아키텍처와 설계 판단](./architecture.md)
 - [검증 결과와 품질 기준](./validation.md)
+- [현재 PoC 재실행 계획서](./poc-rerun-plan.md)
+- [현재 PoC 재실행 결과서](./poc-rerun-results.md)
+- [현재 PoC 피드백 및 원인 분류](./poc-feedback.md)
+- [현재 PoC 재실행 실행 로그](../../poc-rerun-execution-log.md)
 - [SOAR 패키지 1차 PoC 결과서](./poc-1-results.md)
 - [SOAR 패키지 2차 PoC 결과서](./poc-2-results.md)
 - [SOAR 패키지 2차 PoC 계획서](./poc-2-plan.md)
 - [SOAR 패키지 3차 PoC 계획서](./poc-3-plan.md)
+
+위 1~3차 문서는 과거 실행·계획 스냅샷으로 보존한다. 현재 실행 판정은 재실행 계획서·결과서·로그를 기준으로 작성한다.
 
 ## 공개 자료의 범위
 

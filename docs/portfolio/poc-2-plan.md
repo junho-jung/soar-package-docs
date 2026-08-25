@@ -5,7 +5,8 @@
 | 항목 | 내용 |
 |---|---|
 | PoC | 2차 PoC — Teams 알림 및 외부 Inbound 검증 |
-| 상태 | Outbound Teams E2E 부분 실행 완료 — 비동기 전달 실패 원인 추적 후 재검증 필요; Inbound·Zero-Login은 독립 트랙 |
+| 문서 성격 | 역사 계획 기록 — 2026-08-23 `0.1.0.1` 실행용; 새 재실행은 [PoC 재실행 계획서](./poc-rerun-plan.md)를 사용 |
+| 상태 | 과거 계획·부분 실행 기록 보존; 현재 실행 기준 아님 |
 | 선행 문서 | [1차 PoC 결과서](./poc-1-results.md) |
 | 대상 환경 | `soarInstallTest` 또는 별도 초기화된 Sandbox/Developer 조직 |
 | 핵심 범위 | Microsoft Teams, 외부 SIEM/EDR Inbound, Zero-Login 전제조건 |

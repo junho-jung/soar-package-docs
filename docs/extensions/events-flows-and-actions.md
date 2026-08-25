@@ -66,6 +66,8 @@ Subscriber의 Apex Trigger, Queueable, Platform Event subscriber 등은 표준 �
 
 `soarpkg.SecurityInvocableLogger`의 `Send Security Log` 액션은 Screen Flow 또는 Record-Triggered Flow에서 정책 코드·심각도·업무 문맥을 SOAR 평가 흐름에 전달하는 용도입니다. 입력은 `policyCode`, `severity`, `message` 또는 `details`, `recordId`, `targetUserId`로 구성하고, 결과의 `isProcessed`와 `statusMessage`를 후속 분기 조건으로 사용합니다.
 
+Flow Builder에서 관리 패키지 Invocable의 반환 출력이 보이지 않는 조직에서는 결과 Screen 또는 Action 실행 상세를 별도로 구성해 처리 여부를 증적화합니다. `targetUserId`는 정책의 영향 대상과 실행 사용자·결정자를 혼동하지 않도록 별도 테스트 사용자로 입력하고, Audit/Action/Delivery 원장에서 동일 대상이 유지되는지 확인합니다.
+
 입력 문맥에는 최소한의 업무 정보만 넣고, 비밀번호·서명 키·액세스 토큰·민감한 원문을 포함하지 않습니다. Flow 실행이 반복될 수 있으므로 레코드 ID나 업무 요청 ID를 기준으로 중복 정책을 정합니다.
 
 ## 검증 체크리스트
