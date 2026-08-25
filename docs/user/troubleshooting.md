@@ -39,6 +39,17 @@ Health/Webhook/Ping의 HTTP 202는 연결성 점검입니다. 정책 기반 비�
 
 시뮬레이터와 일부 Entry point 버튼은 모의 이벤트·감사 기록 확인용입니다. 실제 외부 전달 검증은 Subscriber Flow의 `Send Security Log`, 실제 정책 이벤트, 또는 승인 후 수동 액션처럼 정책 평가를 거치는 경로로 수행합니다.
 
+## 패키지 Flow가 설치됐지만 실행되지 않음
+
+설치 후 `[SOAR 템플릿]` Flow가 `템플릿=true`, `활성=false`, `관리됨-설치됨`으로 표시될 수 있습니다. 이는 패키지에서 빠진 상태가 아니라 조직별 자동화 충돌과 업무 정책을 검토한 뒤 관리자가 선택적으로 활성화하도록 배포된 상태입니다.
+
+1. Setup & Health Center와 Setup의 Flow 목록에서 이름·트리거·활성 버전을 확인합니다.
+2. VIP 데이터 알림은 `SecurityAlert__e`의 `HIGH/CRITICAL` 이벤트에서 보조 Task를 만들고, 승인 에스컬레이션은 `SecurityActionRequest__e`의 파괴적 액션에서 보조 Task를 만듭니다.
+3. 사용할 템플릿만 Flow Builder에서 활성화하고, 실행 주체의 권한과 중복 Task 여부를 먼저 확인합니다.
+4. Flow 활성화 여부와 별개로 `DASHBOARD/TEAMS/BLOCK` 정책 결정, Action Ledger, Delivery Ledger는 패키지 Apex 경로에서 검증합니다.
+
+Flow 템플릿은 결정자·Fallback·신원 검증·Teams 전달 여부를 판정하지 않습니다. 따라서 Flow가 비활성인 것은 핵심 정책·callback 경로의 장애를 의미하지 않으며, Flow를 활성화하면 정책 모드와 무관하게 보조 Task가 생성될 수 있습니다.
+
 ## 스케줄이 실행되지 않음
 
 - 관리자 권한으로 스케줄 관리자에 접근했는지 확인합니다.

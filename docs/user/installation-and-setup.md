@@ -1,20 +1,20 @@
 # 설치 및 초기 활성화
 
-## 0. 최신 베타 패키지 직접 설치
+## 0. 현재 검증 기준 패키지 직접 설치
 
-현재 공개 설치본은 정식 Release 전 베타 버전 `SOAR_Operations_Core_Next 0.1.0.1`입니다. 아래 링크는 Salesforce 로그인 후 Sandbox 설치 화면으로 이동합니다.
+현재 사용자 UAT 기준 설치본은 `SOAR_Operations_Core_Next 0.1.0.5`입니다. 아래 링크는 Salesforce 로그인 후 Sandbox 설치 화면으로 이동합니다. 운영 조직에는 조직별 승인과 패키지 제공자가 지정한 버전을 적용하세요.
 
 | 환경 | 설치 링크 |
 |---|---|
-| Sandbox | [Sandbox 설치 화면](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tdM000000byy5QAA) |
+| Sandbox | [Sandbox 설치 화면](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tdM000000c9OrQAI) |
 
 - **Package2**: `SOAR_Operations_Core_Next`
 - **Namespace**: `soarpkg`
-- **Subscriber Package Version ID**: `04tdM000000byy5QAA`
+- **Subscriber Package Version ID**: `04tdM000000c9OrQAI`
 - **CLI 설치**:
 
 ```bash
-sf package install --package 04tdM000000byy5QAA --target-org <YOUR_ORG_ALIAS> --wait 30 --no-prompt
+sf package install --package 04tdM000000c9OrQAI --target-org <YOUR_ORG_ALIAS> --security-type AdminsOnly --wait 30 --no-prompt
 ```
 
 설치에는 Salesforce 로그인과 패키지 설치 권한이 필요합니다. 베타 버전은 Sandbox, Developer 또는 Trial 조직에서 설치·권한·기능을 확인합니다. 운영 Production 조직 적용은 정식 배포 정보와 별도 승인 후 진행하세요.
@@ -37,7 +37,7 @@ sf package install --package 04tdM000000byy5QAA --target-org <YOUR_ORG_ALIAS> --
 Salesforce AppExchange 또는 제공자가 전달한 설치 링크에서 패키지를 설치합니다. CLI를 사용할 경우 아래처럼 조직 별칭과 배포 채널에서 받은 패키지 버전 ID를 사용합니다.
 
 ```bash
-sf package install --package 04tdM000000byy5QAA --target-org <YOUR_ORG_ALIAS> --wait 30 --no-prompt
+sf package install --package 04tdM000000c9OrQAI --target-org <YOUR_ORG_ALIAS> --security-type AdminsOnly --wait 30 --no-prompt
 ```
 
 설치 완료 후 패키지 네임스페이스가 적용된 앱과 권한 집합이 보이는지 확인합니다. Subscriber 조직에 패키지 소스를 직접 배포하는 방식은 사용하지 않습니다.
@@ -124,6 +124,19 @@ Health의 HTTP 202는 외부 endpoint 연결과 수락만 증명합니다. 실�
 ### Flow 템플릿 활성화
 
 패키지에 포함된 Flow 템플릿은 설치 후 고객 조직의 자동화 정책에 맞춰 관리자가 직접 활성화합니다. Flow 목록에서 `[SOAR 템플릿]`으로 시작하는 Flow의 상태와 버전을 확인한 뒤, 사용할 Flow만 활성화합니다. Threat Simulator와 Entry point 진단 버튼은 모의 이벤트를 기록할 수 있지만, 그 자체로 실제 정책 기반 Delivery Ledger 생성을 보장하지 않습니다.
+
+### 정책 라우팅과 패키지 Flow의 역할 분리
+
+현재 패키지에는 다음 두 개의 선택형 Flow 템플릿이 포함됩니다.
+
+| Flow 템플릿 | 구독 이벤트 | 기본 동작 | 정책 결정과의 관계 |
+|---|---|---|---|
+| 승인 에스컬레이션 | `soarpkg__SecurityActionRequest__e` | `FREEZE_USER`, `KILL_SESSION`, `FORCE_MFA_RESET` 등 파괴적 요청에 Task 생성 | 결정자·Fallback·신원검증을 판정하지 않는 보조 Task 템플릿 |
+| VIP 데이터 알림 | `soarpkg__SecurityAlert__e` | `HIGH` 또는 `CRITICAL` 이벤트에 Task 생성 | Teams Route나 Action/Delivery Ledger와 독립된 보조 알림 템플릿 |
+
+두 Flow는 패키지에 포함되지만 설치 직후 `Draft/비활성` 상태일 수 있습니다. 이는 누락이 아니라 Subscriber가 조직 정책에 맞춰 활성화하는 설치 후 단계입니다. 실제 `DASHBOARD / TEAMS / BLOCK` 결정, 결정자·그룹·Fallback, Action Ledger, Teams Delivery Ledger는 패키지 Apex가 담당하므로 Flow가 비활성인 상태에서도 핵심 결정·callback 경로는 유지됩니다.
+
+Flow를 활성화하면 정책 모드와 별개로 보조 Task가 생성될 수 있습니다. 정책 결정 결과에 따라서만 Task를 만들려면 Subscriber Flow에서 별도 조건과 원장 조회를 추가하세요.
 
 ## 6. 설치 완료 체크리스트
 

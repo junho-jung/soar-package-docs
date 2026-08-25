@@ -24,8 +24,11 @@ SOAR는 Salesforce를 운영 플랫폼으로 사용하는 조직을 위해 탐�
 
 - [아키텍처와 설계 판단](./architecture.md)
 - [검증 결과와 품질 기준](./validation.md)
+- [SOAR 패키지 1차 PoC 결과서](./poc-1-results.md)
+- [SOAR 패키지 2차 PoC 결과서](./poc-2-results.md)
+- [SOAR 패키지 2차 PoC 계획서](./poc-2-plan.md)
+- [SOAR 패키지 3차 PoC 계획서](./poc-3-plan.md)
 
 ## 공개 자료의 범위
 
 이 포트폴리오는 제품 설계와 검증 방법을 보여주기 위한 자료입니다. 패키지 내부 구현 소스, 고객 조직 식별정보, 인증 정보와 원본 테스트 로그는 포함하지 않습니다.
-

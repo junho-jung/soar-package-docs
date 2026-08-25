@@ -4,7 +4,9 @@
 
 SOAR가 생성한 표준 보안 이벤트는 Subscriber 조직의 선언형 자동화와 프로코드 후속 처리에 연결할 수 있습니다.
 
-`탐지 신호 → 정책 평가 → 표준 보안 이벤트 → Flow/후속 액션 → 감사 원장`
+`탐지 신호 → SecurityAlert__e → Apex 정책 평가 → Action/Delivery Ledger → 외부 전달`
+
+Subscriber Flow와 프로코드 후속 자동화는 이 핵심 경로와 병렬로 표준 이벤트를 받아 Task·티켓·추가 감사 처리를 수행합니다. Flow가 비활성인 상태에서도 패키지 Apex의 정책 결정·원장·callback 경로는 별도로 동작합니다.
 
 표준 이벤트의 구체적인 필드와 설치 버전별 계약은 패키지 문서와 Salesforce Describe 결과를 기준으로 확인합니다. 이 공개 문서는 내부 스키마를 복사해 제공하지 않습니다.
 
@@ -39,6 +41,15 @@ Flow에서 파괴적 조치를 직접 연결할 때는 승인·중복·롤백 �
 패키지 Flow 템플릿은 Subscriber 조직에 설치되지만 조직 정책에 따라 비활성 또는 초안 상태로 남을 수 있습니다. 사용할 템플릿은 Salesforce Flow Builder에서 관리자가 직접 활성화하고, 활성 버전과 실행 주체 권한을 확인합니다.
 
 `Send Security Log`를 호출하는 Subscriber Flow는 실제 정책 평가와 Delivery Ledger를 검증하는 대표적인 진입점입니다. 반대로 Threat Simulator나 단순 Entry point 진단 UI는 모의 감사 이벤트를 남길 수 있어도 외부 Teams callout과 동일한 경로라고 보지 않습니다. 실제 전달 판정은 정책 평가, `NOTIFY_TEAMS`, Delivery Ledger 최종 상태, 외부 카드 수신을 함께 확인합니다.
+
+패키지에 포함된 Flow 템플릿의 기본 계약은 다음과 같습니다.
+
+| Flow 템플릿 | 플랫폼 이벤트 | 기본 동작 | 포함하지 않는 결정 |
+|---|---|---|---|
+| 승인 에스컬레이션 | `soarpkg__SecurityActionRequest__e` | `FREEZE_USER`, `KILL_SESSION`, `FORCE_MFA_RESET` 등 파괴적 요청에 Task 생성 | `DecisionMode__c`, 결정자, Fallback, 신원 검증, Delivery Ledger |
+| VIP 데이터 알림 | `soarpkg__SecurityAlert__e` | `HIGH` 또는 `CRITICAL` 이벤트에 Task 생성 | Teams Route, Action Ledger, Delivery Ledger |
+
+두 Flow는 선택형 보조 템플릿이며 설치 직후 `Draft/비활성`일 수 있습니다. 활성화하면 정책 모드와 별개로 Task가 생성될 수 있으므로, 정책 결정 결과에 종속된 자동화가 필요하면 Subscriber Flow에 별도 조건과 원장 조회를 추가합니다.
 
 ## 프로코드 커스텀 액션
 
