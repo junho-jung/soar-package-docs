@@ -160,5 +160,5 @@ Threat Simulator로 감사 로그만 증가한 경우에는 위 경로의 일부
 - `ACCEPTED`는 외부 전송 접수이고, `DELIVERED`가 최종 전달 성공입니다.
 - Action Ledger는 의사결정 원장이고, Delivery Ledger는 외부 전달 원장입니다.
 - Site callback URL이 Apex REST 경로로 보이는 것은 정상입니다.
-- Slack은 현재 검증본에서 실제 Block Kit callback 전달이 완료된 채널이 아닙니다.
+- Slack은 Teams와 동일한 typed route·Block Kit·서명된 단회 callback 계약을 지원하는 선택 채널입니다. `IF_Slack_Base` Named Credential과 조직별 서명 설정을 완료한 뒤 외부 수신·`DELIVERED`·callback 결과를 별도 E2E 게이트로 판정합니다.
 - 파괴적 액션은 테스트에서 실제 대상에 실행하지 않고 승인·버튼·callback·감사 계약만 검증합니다.

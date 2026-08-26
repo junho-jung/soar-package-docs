@@ -118,8 +118,8 @@ Health의 HTTP 202는 외부 endpoint가 요청을 수락했다는 연결성 증
 
 ### 4.5 Slack과 기타 채널
 
-- 현재 검증 기준에서는 Slack의 표준 Route/핑 진입점은 보이지만 `IF_Slack_Base`와 Block Kit callback 기반 실제 액션 전달은 완성된 경로로 제공되지 않습니다.
-- Slack은 연결·확장 루트로 남겨두고 Teams 실제 전달 증적으로 대체하지 않습니다.
+- Slack은 Teams와 동일한 typed notification route와 Block Kit callback 계약을 제공하는 선택 채널입니다. `IF_Slack_Base` Named Credential과 Slack 서명 검증용 조직 설정을 구성하면 정책 알림, 승인·거절·실행 callback, Delivery Ledger 추적을 사용할 수 있습니다.
+- Slack은 Teams와 별도의 채널·원장 증적으로 판정합니다. `ACCEPTED` 또는 연결성 Ping만으로 완료 처리하지 말고 Slack 카드 수신, callback 결과, 최종 `DELIVERED`를 확인합니다.
 - Generic Webhook·SIEM·Ticketing·Custom은 현재 Ping/연결성 진단과 Subscriber 확장 대상으로 이해합니다.
 
 ### 4.6 Flow 템플릿
@@ -217,7 +217,7 @@ Threat Simulator의 성공 토스트나 감사 로그 1건만으로 5~10단계�
 | `LOG_ONLY` | 감사 | 기록만 남기고 파괴적 대응을 하지 않음 |
 | `NOTIFY_MANAGER` | 통지 | 내부 결정자/관리자에게 알림 |
 | `NOTIFY_TEAMS` | 통지 | Teams Route로 보안 카드 전달 |
-| `NOTIFY_SLACK` | 통지 루트 | Slack Route 확장 지점. 현재 검증본에서는 실제 Block Kit callback 미완성 |
+| `NOTIFY_SLACK` | 통지 | Slack Block Kit 카드와 서명된 단회 callback 전달. `IF_Slack_Base`와 외부 수신 E2E는 조직별 선택 구성 |
 
 파괴적 액션은 목록에 표시되더라도 승인·신원·대상 재검증을 통과하기 전에는 실행 버튼이 열리지 않습니다. 테스트에서는 Dry Run 또는 카드 접수·버튼 숨김·원장 상태까지만 검증하고 실제 대상 계정에 파괴적 조치를 실행하지 않습니다.
 
@@ -289,7 +289,7 @@ callback code, token, correlation, idempotency, approval 식별자는 일반 로
 - [ ] Active Site와 Guest 권한 확인
 - [ ] Inbound Base URL과 Callback `READY` 확인
 - [ ] Teams Named Credential·Principal Access·`soarpkg` namespace 허용 확인
-- [ ] Slack은 현재 지원 경계를 이해하고 비활성 루트로 관리
+- [ ] Slack을 사용할 경우 `IF_Slack_Base`, 서명 설정, Route source, callback 및 `DELIVERED` 증적 확인 (미사용 시 optional 상태로 유지)
 - [ ] 정책·액션·Route·Decision Mode 검토
 - [ ] 필요한 Flow 템플릿만 활성화
 - [ ] Health/Webhook/Ping와 실제 정책 전달을 별도로 기록

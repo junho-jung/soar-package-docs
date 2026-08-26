@@ -31,6 +31,8 @@ SOAR는 운영 권한과 탐지 대상 권한을 분리합니다. 일반 사용�
 
 정책 코드, 심각도, 우선순위와 채널을 기준으로 알림 경로를 관리합니다. 동일 이벤트의 반복 알림은 중복 억제 창으로 제어하고, 일시적 전송 실패는 전달 원장과 제한된 재시도로 추적합니다.
 
+Teams와 Slack은 각각 `IF_Teams_Base`/`IF_Slack_Base` Named Credential을 사용하는 typed 알림 어댑터입니다. Slack은 선택 채널이며 Block Kit 카드와 서명된 단회 callback을 사용하므로, 채널을 활성화한 조직은 Teams와 동일하게 `ACCEPTED`·Attempt·`DELIVERED` 및 callback 결과를 별도로 확인합니다.
+
 ### Teams 카드 버튼과 Site callback 주소
 
 Teams 카드의 버튼은 두 종류의 목적지를 가질 수 있습니다.
