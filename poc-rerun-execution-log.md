@@ -126,6 +126,16 @@
 - Site/Guest/Inbound는 문서 흐름대로 구성되어 Callback Health `READY`까지 확인했다. 다만 카드가 전달되지 않아 Site callback URL·유효/만료/replay 화면은 아직 열지 못했다.
 - Dashboard의 Data 채널 집계/필터 불일치는 핵심 UI 회귀의 제품 이슈로 남겼고, Teams outbound 및 Inbound·Zero-Login 판정과 섞지 않았다.
 
+### 최신 Chrome UI 재현 이력 — 정책 이벤트·관측성 후속
+
+| 상태 | 테스트 ID | 단계 | 결과 및 막힘 | 조치 | 증적 |
+|---|---|---|---|---|---|
+| 부분 완료→실패 재확인 | R4-17 | Screen Flow UI 정책 이벤트 재현 | Lightning의 Flow 실행 버튼이 로그인 화면으로 이동해 CLI alias 인증으로 Visualforce Flow runtime을 다시 열었다. Chrome UI에서 `OFF_HOURS_DATA_MUTATION`·HIGH·Event Key `POC2_TEAMS_TRACE_UI_20260826_01`·비파괴 메시지·분리 대상 사용자를 입력해 제출했다. Audit에는 새 행이 생겼지만 대상은 다시 실행 주체 `User User`, 리소스는 `Event: Unknown`으로 표시됐다. | 로그인 차단 규칙에 따라 `sf org open --target-org soarInstallTest --path ...`로 인증된 Chrome 화면을 복구하고, 입력값이 보이는 상태에서 `다음`을 1회 실행 | Dashboard Audit 최신 행; Flow 화면 초기화 후 제출 완료 |
+| 완료 | R4-18 | Delivery·Async 재조회 | 새 이벤트의 `POC2_TEAMS_ACTION_E2E` Ledger는 처음 `RETRYING 2/3`으로 보였고 전체 Dashboard 재조회 후 `EXHAUSTED 3/3 / DELIVERY_FAILED`가 됐다. `SecurityDeliveryLedgerService`·`SecurityDeliveryRetryJob`은 완료 상태였으나 Apex Jobs에 상세 외부 예외는 없었다. Teams 카드와 Site callback URL은 수신되지 않았다. | 재시도 상태가 끝날 때까지 추가 이벤트를 만들지 않고 Audit·Ledger·Async Jobs를 분리 대조 | Setup & Health·Async Apex Jobs·Chrome 탭 목록 |
+| 막힘 | R4-19 | Process Automated Trace 재설정 | 이전 Process Automated Trace Flag는 이미 만료되어 이번 이벤트의 Debug Log가 생성되지 않았다. 새 Trace Flag 화면에서 자동 프로세스 대상을 선택하고 전용 Debug Level 조회를 시도했으나 Salesforce 조회 팝업이 별도 Chrome 탭으로 열려 부모 폼에 선택값을 전달하지 못했고, 저장 시 `디버그 수준: 일치하는 항목이 없습니다`가 표시됐다. 새 Debug Level 이름은 재제출 시 중복 오류가 반환되어 존재 상태를 확인했지만, Trace Flag 자체 저장은 확정하지 않았다. | 추가 외부 Teams 이벤트는 실행하지 않고 팝업 선택 전달 문제를 진단 장애로 기록 | Debug Logs UI·Debug Level UI; 민감한 ID/토큰 미기록 |
+
+이번 재현의 최종 증거는 **Teams 연결성 통과 + 정책 기반 비동기 전달 실패 재확인**이다. `DELIVERED`, 실제 Teams 카드, 카드 action URL, Site callback의 유효·만료·replay 화면은 여전히 만들지 못했다.
+
 ## 보안 점검
 
 - [x] 원시 Webhook URL을 기록하지 않음

@@ -50,6 +50,8 @@
 | P-13 | `GUEST_USER_DATA_LEAK` 평가 MEDIUM과 처음 만든 임시 Route HIGH가 맞지 않아 원하는 Route가 선택되지 않음 | 사용자 Route 설정 정합성 문제 | 높음 | 정책 평가 Severity와 Route Profile의 Policy Code/Severity를 동일하게 맞추고 Route 목록을 새로고침해 `Match=true`를 확인해야 한다. 문서에 예시를 추가할 필요가 있다. |
 | P-14 | Health Center 고정 테스트 이벤트는 성공 토스트와 Audit만 만들고 Delivery Ledger를 만들지 않음 | 검증 UX·문서 구분 부족 가능성 | 높음 | 해당 버튼을 실제 outbound 증적으로 사용하지 않고, 고유 정책 이벤트 → Audit → Action → Delivery → Teams 카드 순서를 명시해야 한다. |
 | P-15 | Async Apex 작업은 완료 상태지만 callout 실패의 상세 예외가 Apex Jobs UI에 노출되지 않음 | 패키지 관측성 부족 가능성 | 중간~높음 | Delivery Ledger에 안전한 분류형 실패 원인·attempt별 외부 응답·실행 주체/Principal 진단을 추가하거나, PoC용 Trace Flag/로그 수집 절차를 제공해야 한다. |
+| P-16 | 이전 Process Automated Trace Flag가 만료되어 최신 정책 이벤트의 Debug Log가 생성되지 않았고, 새 Trace Flag 저장도 Debug Level 조회 팝업 전달 문제로 막힘 | Salesforce Setup/Chrome UI 관측성 경로 문제 | 높음 | 정책 이벤트를 추가 반복하지 않고, 새 Trace Flag·Debug Level 생성 화면과 `일치하는 항목이 없습니다` 오류를 기록했다. 사용자 PoC 런북에 Trace Flag 저장 확인과 팝업 장애 우회 절차가 필요하다. |
+| P-17 | 새 Chrome UI 정책 이벤트도 Audit은 생성했지만 대상이 실행 주체로 표시되고 Ledger가 `EXHAUSTED/3/3/DELIVERY_FAILED`로 종료됨 | 패키지 비동기 전달·대상 바인딩 문제 재현 | 높음 | Teams Health/직접 POST와 정책 E2E를 계속 분리한다. `SecurityDeliveryLedgerService`·`SecurityDeliveryRetryJob` 완료만으로 외부 전달 성공을 판정하지 않고 `DELIVERED`와 카드 수신을 요구한다. |
 
 ## 4. 레포 설명이 부족한 부분
 
@@ -64,6 +66,7 @@
 5. Inbound fixture의 출처·버전·필드표를 제공하거나, 공개할 수 없다면 “Provider가 별도 전달해야 하는 필수 테스트 자산”이라고 전면에 표시한다.
 6. Slack이 현재 검증본에서 완성된 outbound 경로가 아니라는 점과, Slack 미설정이 Teams 검증을 무효화하지 않는다는 점을 Health 화면과 README에서 같은 용어로 표시한다.
 7. CSV 다운로드 성공 증적과 Flow 활성 버전 교체 절차를 사용자 런북에 추가한다.
+8. Debug Log 진단 절차에 “Process Automated Trace Flag 저장 완료 확인”과 Debug Level 조회 팝업이 부모 폼에 선택값을 전달했는지 확인하는 단계를 추가한다. 팝업이 분리 탭으로 열려 선택이 반영되지 않으면, 추가 정책 이벤트를 반복하기 전에 해당 UI 경로를 장애로 남긴다.
 
 반대로 다음은 레포 설명 부족으로 보지 않는다.
 

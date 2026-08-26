@@ -91,6 +91,16 @@ Org ID, 사용자 이메일, Secret, 원시 URL, token, callback query, correlat
 | R7-03 | idempotency·권한·실패·Renderer | 미실행 | - |  |
 | R8-01 | 정리·원복·잔여 상태 | 결과 문서화 완료; 테스트 Flow V2·Teams Permission Set·Named Credential은 현재 오그에 남아 있고 운영 전환/비활성화 결정은 하지 않음 | Setup·문서 | 부분 완료 |
 
+### 최신 Chrome UI 재현 결과 — 정책 이벤트·관측성
+
+| 테스트 | 현재 결과 | 증적 및 해석 |
+|---|---|---|
+| R4-17 정책 이벤트 제출 | 부분 통과 | Lightning Flow 실행 진입이 로그인 화면으로 전환되어 CLI alias 인증으로 Visualforce runtime을 열었다. Chrome UI에서 Event Key `POC2_TEAMS_TRACE_UI_20260826_01`을 포함한 `OFF_HOURS_DATA_MUTATION`·HIGH 비파괴 이벤트를 제출했고 Audit 행이 추가됐다. 다만 대상은 분리 입력한 정책 대상이 아니라 실행 주체로, 리소스는 `Event: Unknown`으로 표시됐다. |
+| R4-18 Delivery 최종 상태 | 실패 재확인 | 최신 `POC2_TEAMS_ACTION_E2E` Ledger는 `RETRYING 2/3` 후 `EXHAUSTED 3/3 / DELIVERY_FAILED`가 됐다. 이는 `NOTIFY_TEAMS` 정책 전달 실패이며 Teams 연결 실패로 표현하지 않는다. |
+| R4-18 Async Apex | 부분 확인 | Ledger 서비스와 Retry 작업은 완료 상태였지만 Apex Jobs UI에 외부 callout 세부 예외가 노출되지 않았다. |
+| R4-18 실제 Teams 수신 | 미통과 | 새 Teams 카드가 Chrome에 나타나지 않았고 `DELIVERED`도 없었다. 따라서 카드 action URL의 Site host/path를 확인할 수 없었다. |
+| R4-19 Debug Log 후속 | 진단 설정 막힘 | 이전 Process Automated Trace Flag는 만료되어 새 이벤트 로그가 없었다. 새 Trace Flag 화면의 Debug Level 조회 팝업이 부모 폼에 선택값을 넘기지 않아 저장이 실패했다. 추가 이벤트는 만들지 않았다. |
+
 ## 3-1. 가이드에서 확인한 필요 설정값
 
 새 Subscriber 오그의 `1-Click 설정 가이드`를 Chrome UI에서 읽기 전용으로 확인했다. 외부 URL 자체는 기록하지 않는다.
@@ -167,7 +177,8 @@ Power Automate endpoint는 outbound 수신 주소이고, Zero-Login 승인·실�
 | 10 | R4-11 | Health Center의 `테스트 보안 이벤트 발송`은 성공 토스트·Audit만 만들고 Delivery Ledger를 만들지 않음 | 고정 진단 이벤트 경로가 실제 정책 Route를 거치지 않는 것으로 보임 | 실제 정책 Flow 이벤트와 별도 증적으로 기록 | 해결·검증 규칙 보완 |
 | 11 | R4-12 | 처음 만든 임시 Route의 HIGH 매칭과 `GUEST_USER_DATA_LEAK` 정책 평가 MEDIUM이 어긋남 | 정책 평가 Severity와 Route 매칭값 불일치 | 알려진 `OFF_HOURS_DATA_MUTATION`·HIGH Route로 저장 후 새로고침 검증 | 해결·사용자 설정 주의사항 |
 | 12 | R4-14/R4-15 | Async Apex job은 완료됐지만 외부 callout 예외가 Apex Jobs UI에 노출되지 않음 | 패키지 전달 실패의 세부 관측성이 부족하고 기본 Trace Flag가 만료됨 | Process Automated Trace Flag와 Callout/Apex 로그 수준을 UI에서 준비; 추가 발송은 확인 후 수행 | 진단 준비·재현 필요 |
+| 13 | R4-17/R4-19 | Chrome Flow 진입은 CLI 인증으로 복구했지만, Debug Level 조회 팝업이 부모 Trace Flag 폼에 선택값을 전달하지 않음 | Salesforce Setup의 별도 조회 탭과 부모 Visualforce 폼 사이의 UI 연결 문제. 이 장애로 새 Trace Flag 저장과 상세 로그 수집이 확정되지 않음 | 로그인 차단은 alias 기반 Chrome 진입으로 복구하고, Trace Flag 팝업 장애는 별도 사용자 진단 절차/스크린샷 항목으로 기록. 추가 외부 이벤트는 반복하지 않음 | 사용자 UI/Setup 관측성 장애 |
 
 ## 8. 최종 결론
 
-재실행 결과는 현재 기준 패키지와 새 Subscriber 조직에 대한 증적만으로 판정한다. 과거 PoC의 통과·실패 상태를 현재 상태로 간주하지 않는다. 현재는 설치·권한·1-Click·핵심 UI·Flow 감사 이벤트·Teams 연결 구성·Principal/namespace·직접 Teams POST·정책 대상 역할 분리·Site/Guest Callback `READY`까지 확인했다. 그러나 최신 정책 이벤트의 Delivery Ledger가 `EXHAUSTED/3/3/DELIVERY_FAILED`이고 대상 바인딩도 실행 주체로 표시되어 `DELIVERED`·Teams 카드 수신을 확보하지 못했다. 따라서 카드 action URL이 Site callback을 가리키는지, token 유효·만료·replay 상태를 브라우저 화면에서 확인하지 않았다. 현재 판정은 G3 통과, G4 미통과, G5 구성 통과·시나리오 미실행이며 **전체 PoC는 완료로 판정할 수 없다**.
+재실행 결과는 현재 기준 패키지와 새 Subscriber 조직에 대한 증적만으로 판정한다. 과거 PoC의 통과·실패 상태를 현재 상태로 간주하지 않는다. 현재는 설치·권한·1-Click·핵심 UI·Flow 감사 이벤트·Teams 연결 구성·Principal/namespace·직접 Teams POST·정책 대상 역할 분리·Site/Guest Callback `READY`까지 확인했다. 최신 Chrome UI 재현에서도 Audit과 `NOTIFY_TEAMS` Ledger 생성은 재확인됐지만 Ledger는 `EXHAUSTED/3/3/DELIVERY_FAILED`로 종료되고 대상 바인딩은 실행 주체로 표시됐다. `DELIVERED`·Teams 카드·카드 action URL·유효/만료/replay callback 화면은 확보하지 못했다. 현재 판정은 G3 통과, G4 미통과, G5 구성 통과·시나리오 미실행이며 **전체 PoC는 완료로 판정할 수 없다**.
